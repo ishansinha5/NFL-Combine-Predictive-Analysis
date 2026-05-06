@@ -9,6 +9,10 @@ def fix_height(ht):
     
     ht = str(ht).strip()
 
+    # SAFEGUARD 1: If it's already purely inches (e.g., "74")
+    if (ht.isdigit()):
+        return int(ht)
+
     if ("-" in ht):
         parts = ht.split("-")
         
@@ -16,7 +20,6 @@ def fix_height(ht):
             left = parts[0]
             right = parts[1]
 
-            # Case 1: Standard numeric format (e.g., "6-2")
             if (left.isdigit() and right.isdigit()):
                 return (int(left) * 12) + int(right)
 
@@ -29,13 +32,11 @@ def fix_height(ht):
             left_str = left[:3].title()
             right_str = right[:3].title()
 
-            # Case 2: Excel corrupted Day-Month (e.g., "11-May")
             if (left.isdigit() and right_str in month_map):
                 inches = int(left)
                 feet = month_map[right_str]
                 return (feet * 12) + inches
 
-            # Case 3: Excel corrupted Month-Day (e.g., "May-11")
             if (left_str in month_map and right.isdigit()):
                 feet = month_map[left_str]
                 inches = int(right)
@@ -53,7 +54,6 @@ def clean_and_merge_data():
     all_combine_data = []
     all_stats_data = []
 
-    # 1. Load Data
     for year in range(2021, 2027):
         if (year == 2026):
             combine_file_path = '../data/2026Combine.csv'
@@ -74,11 +74,12 @@ def clean_and_merge_data():
     master_combine = pd.concat(all_combine_data, ignore_index=True)
     master_stats = pd.concat(all_stats_data, ignore_index=True)
 
-    # 2. Regex Scrubbing
     master_combine['Player'] = master_combine['Player'].str.replace(r'[^a-zA-Z\s.-]', '', regex=True).str.strip()
     master_stats['Player'] = master_stats['Player'].str.replace(r'[^a-zA-Z\s.-]', '', regex=True).str.strip()
+    
+    # SAFEGUARD 2: Strip trailing spaces from positions
+    master_combine['Pos'] = master_combine['Pos'].astype(str).str.strip()
 
-    # 3. LEFT Join
     merged_df = pd.merge(
         master_combine, 
         master_stats, 
@@ -100,7 +101,6 @@ def clean_and_merge_data():
     all_columns = feature_columns + target_columns
     clean_df = merged_df[all_columns].copy()
 
-    # 4. Numerics & Metrics
     clean_df['Ht_Inches'] = clean_df['Ht'].apply(fix_height)
     clean_df = clean_df.drop(columns=['Ht'])
 
@@ -116,23 +116,21 @@ def clean_and_merge_data():
         if (years > 0):
             avg_wav_list.append(wav / years)
         else:
-            avg_wav_list.append(np.nan)
+            # SAFEGUARD 3: explicitly assign 0.0 to rookies
+            avg_wav_list.append(0.0) 
 
     clean_df['Avg_wAV_Per_Season'] = avg_wav_list
 
-    # 5. Omit Kickers and Punters
     kicker_punter_indices = []
     for index, row in clean_df.iterrows():
         if (row["Pos"] == "K" or row["Pos"] == "P"):
             kicker_punter_indices.append(index)
 
     clean_df = clean_df.drop(kicker_punter_indices).reset_index(drop=True)
-
-    # 6. Drop Heavily Missing Columns
     clean_df = clean_df.drop(columns=['Bench', '3Cone', 'Shuttle'])
 
-    # 7. Filling in the blanks using position averages
-    traits_to_save = ['40yd', 'Vertical', 'Broad Jump', 'Wt']
+    # SAFEGUARD 4: Added Ht_Inches to the traits to save
+    traits_to_save = ['40yd', 'Vertical', 'Broad Jump', 'Wt', 'Ht_Inches']
     unique_positions = clean_df['Pos'].unique()
 
     for trait in traits_to_save:
@@ -145,30 +143,22 @@ def clean_and_merge_data():
                     if (pd.isna(row[trait])):
                         clean_df.at[index, trait] = pos_avg
 
-    # 8. Final Drop & Return
     clean_df = clean_df.dropna().reset_index(drop=True)
     
     return clean_df
 
-# ==========================================
-# LOCAL TESTING BLOCK
-# ==========================================
-# This will only run if you execute this file directly.
 if __name__ == "__main__":
     print("Spinning up the data cleaner engine...")
-    
     try:
-        # Run your master function
         df = clean_and_merge_data()
-        
-        # Spit out the diagnostics
-        print("\nSUCCESS!")
+        print("\n✅ SUCCESS!")
         print(f"Total Players Processed: {len(df)}")
         print(f"Final Data Shape: {df.shape}")
         
-        print("\nSneak peek at the first 3 rows:")
-        print(df[['Player', 'Pos', 'Draft_Year', 'Avg_wAV_Per_Season']].head(3))
+        # Adding a quick check to prove 2026 survived
+        rookies = df[df['Draft_Year'] == 2026]
+        print(f"2026 Rookies Survived: {len(rookies)}")
         
     except Exception as e:
-        print(f"\nERROR: The cleaner crashed.")
+        print(f"\n❌ ERROR: The cleaner crashed.")
         print(f"Details: {e}")
