@@ -1,10 +1,10 @@
 # 2026 NFL Draft Class Analyzer: Machine Learning Pipeline
 
-Welcome to my NFL Draft analysis project! This codebase is a massive architectural evolution of a final project I originally did for CMSE 202 at Michigan State University. In that original project, my group built fragmented Jupyter notebooks to predict player success, and I specifically handled the machine learning models for the Tight End position. 
+Welcome to my NFL Draft analysis project. This codebase is a massive architectural evolution of a final project I originally completed for CMSE 202 at Michigan State University. In that original project, my group built fragmented Jupyter notebooks to predict player success, and I specifically handled the machine learning models for the Tight End position. 
 
 I wanted to take those early concepts and upgrade them into a proper, object-oriented enterprise machine learning pipeline. 
 
-This program ingests historical NFL Combine data (2021–2025), trains an ensemble of models on raw athletic traits, and scores the 2026 NFL Draft class to mathematically grade the draft hauls of the NFC North plus the Baltimore Ravens.
+This program ingests historical NFL Combine data (2021–2025), trains an ensemble of models on raw athletic traits, and scores the 2026 NFL Draft class. I specifically targeted the NFC North (since I am a Chicago Bears fan), the Baltimore Ravens (the team of a very good friend of mine), and the Indianapolis Colts.
 
 ## The Tech Stack & Architecture
 
@@ -16,12 +16,12 @@ Moving from Jupyter notebooks to a modular Python pipeline meant making some big
 
 ## Conclusions & Takeaways
 
-So, who won the draft? Mathematically, the **Minnesota Vikings** walked away with the best overall draft class, scoring an average Hybrid Score of 1.960 per drafted player, heavily anchored by their defensive line picks. 
+So, who won the draft? Mathematically, the **Minnesota Vikings** walked away with the best overall draft class among the teams evaluated, scoring an average Hybrid Score of 1.960 per drafted player, heavily anchored by their defensive line picks. 
 
 Beyond the football insights, this project was a massive learning experience for me:
-1.  **Modular Python:** I learned how to properly separate concerns. Moving data cleaning, model training, and orchestration into their own isolated scripts (`data_cleaner.py`, `predictor.py`, `team_grader.py`) makes the code infinitely easier to debug.
-2.  **Handling Missing Data:** I built strict drop logic. If a player wasn't invited to the Combine or didn't run the required drills, the pipeline refuses to hallucinate dummy stats to score them. (This is why a few late-round picks are intentionally missing from the final outputs).
-3.  **Prompt Engineering:** I got significantly better at using AI as an architectural guide rather than a syntax fixer, prompting it for high-level ML design patterns rather than just asking it to write loops.
+1.  **Modular Python:** I learned how to properly separate concerns. Moving data cleaning, model training, and orchestration into their own isolated scripts (`data_cleaner.py`, `predictor.py`, `team_grader.py`) makes the code infinitely easier to debug and scale.
+2.  **Handling Missing Data:** I built strict drop logic. If a player wasn't invited to the Combine or didn't run the required drills, the pipeline refuses to hallucinate dummy stats to score them. This maintains mathematical integrity (and is why a few late-round picks or undrafted free agents are intentionally missing from the final outputs).
+3.  **Advanced ML Techniques:** Upgrading from basic linear regressions to an ensemble method utilizing Random Forests and OHE drastically improved the model's ability to evaluate complex, real-world data.
 
 ## How to Use & Repurpose This Repo
 
@@ -30,8 +30,18 @@ Want to see how your favorite team's draft class scored? You can easily clone th
 **Step-by-Step Instructions:**
 1.  **Clone the repository:** `git clone https://github.com/yourusername/2026_draft_analysis.git`
 2.  **Navigate to the data folder:** Open `/data/raw_2026_picks.csv`.
-3.  **Add your team:** Manually add the players your team drafted using the exact format: `Team Name, Player Name, Position, College`. *(Note: Ensure the player's name is spelled exactly as it appears in standard NFL Combine databases, or the `inner` join will drop them!)*
+3.  **Add your team:** Manually add the players your team drafted using the exact format: `Team Name,Player Name,Position,College`. *(Note: Ensure the player's name is spelled exactly as it appears in standard NFL Combine databases, or the `inner` join will drop them)*
 4.  **Update the Orchestrator:** Open `/models/team_grader.py`, find the `target_teams` list variable, and add your exact team string to the array.
-5.  **Run the pipeline:** Open your terminal, navigate to the `/models/` directory, and run `python team_grader.py`. 
+5.  **Run the pipeline:** Open your terminal and navigate to the `/models/` directory.
 
-By default, the pipeline runs in **Normalized Mode**. To run it in Cumulative Mode, simply run `python team_grader.py cumulative`. To understand the difference between these two datasets, check out the `README.md` inside the `/visualizations/` folder!
+To generate the Franchise evaluations, run:
+`python team_grader.py`
+
+To generate the Positional evaluations, run:
+`python position_grader.py`
+
+By default, the pipeline runs in **Normalized Mode**. If you want to evaluate players based on raw career longevity rather than per-season impact, simply append `cumulative` to the commands:
+`python team_grader.py cumulative`
+`python position_grader.py cumulative`
+
+To understand the exact difference between these two mathematical approaches, check out the `README.md` inside the `/visualizations/` folder.
