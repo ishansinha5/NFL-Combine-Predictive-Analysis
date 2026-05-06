@@ -85,14 +85,14 @@ def grade_teams(run_mode):
     print("4. Merging Predictions with Team Data...")
     team_drafts = pd.merge(picks_df, scored_df, on='Player', how='inner')
     
-    # ADDED THE COLTS TO THE TARGET ARRAY
     target_teams = [
         'Chicago Bears', 
         'Detroit Lions', 
         'Green Bay Packers', 
         'Minnesota Vikings', 
         'Baltimore Ravens',
-        'Indianapolis Colts'
+        'Indianapolis Colts',
+        'Buffalo Bills'
     ]
     merged_df = team_drafts[team_drafts['Team'].isin(target_teams)].copy()
     
