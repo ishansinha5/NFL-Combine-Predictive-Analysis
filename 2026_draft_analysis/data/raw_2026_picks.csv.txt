@@ -1,0 +1,33 @@
+Team,Player,Position,College
+Chicago Bears,Dillon Thieneman,S,Oregon
+Chicago Bears,Logan Jones,C,Iowa
+Chicago Bears,Sam Roush,TE,Stanford
+Chicago Bears,Zavion Thomas,WR,LSU
+Chicago Bears,Malik Muhammad,CB,Texas
+Chicago Bears,Keyshaun Elliott,LB,Arizona State
+Chicago Bears,Jordan van den Berg,DT,Georgia Tech
+Green Bay Packers,Brandon Cisse,CB,South Carolina
+Green Bay Packers,Chris McClellan,DT,Missouri
+Green Bay Packers,Dani Dennis-Sutton,EDGE,Penn State
+Green Bay Packers,Jager Burton,C,Kentucky
+Green Bay Packers,Domani Jackson,CB,Alabama
+Green Bay Packers,Trey Smack,K,Florida
+Detroit Lions,Blake Miller,OT,Clemson
+Detroit Lions,Derrick Moore,EDGE,Michigan
+Detroit Lions,Jimmy Rolder,LB,Michigan
+Detroit Lions,Keith Abney II,CB,Arizona State
+Detroit Lions,Kendrick Law,WR,Kentucky
+Detroit Lions,Skyler Gill-Howard,DT,Texas Tech
+Detroit Lions,Tyre West,DL,Tennessee
+Minnesota Vikings,Caleb Banks,DL,Florida
+Minnesota Vikings,Jake Golday,LB,Cincinnati
+Minnesota Vikings,Domonique Orange,DL,Iowa State
+Minnesota Vikings,Caleb Tiernan,OT,Northwestern
+Minnesota Vikings,Jakobe Thomas,S,Miami
+Minnesota Vikings,Max Bredeson,FB,Michigan
+Minnesota Vikings,Charles Demmings,CB,Stephen F. Austin State
+Minnesota Vikings,Demond Claiborne,RB,Wake Forest
+Minnesota Vikings,Gavin Gerhardt,C,Cincinnati
+Baltimore Ravens,Olaivavega Ioane,G,Penn State
+Baltimore Ravens,Zion Young,EDGE,Missouri
+Baltimore Ravens,Ryan Eckley,P,Michigan State
