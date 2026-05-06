@@ -61,7 +61,7 @@ def generate_team_visualizations(merged_df, mode):
             print("Generated team chart for: " + team_name)
 
 def grade_teams(run_mode):
-    print("1. Booting up the ML Engine (OHE Enabled)...")
+    print("1. Spinning up the ML Engine (OHE Enabled)...")
     train_df, predict_df = clean_and_merge_data()
     
     print("2. Running SVM/RF A/B Test & Ensemble Generation for " + run_mode + " mode...")
@@ -85,7 +85,15 @@ def grade_teams(run_mode):
     print("4. Merging Predictions with Team Data...")
     team_drafts = pd.merge(picks_df, scored_df, on='Player', how='inner')
     
-    target_teams = ['Chicago Bears', 'Detroit Lions', 'Green Bay Packers', 'Minnesota Vikings', 'Baltimore Ravens']
+    # ADDED THE COLTS TO THE TARGET ARRAY
+    target_teams = [
+        'Chicago Bears', 
+        'Detroit Lions', 
+        'Green Bay Packers', 
+        'Minnesota Vikings', 
+        'Baltimore Ravens',
+        'Indianapolis Colts'
+    ]
     merged_df = team_drafts[team_drafts['Team'].isin(target_teams)].copy()
     
     print("\n=================================")
