@@ -3,7 +3,7 @@ import numpy as np
 import os
 
 def convert_to_inches(measurement):
-    """Translates heights and broad jumps into pure inches."""
+    """Translates heights and broad jumps into inches for standardized variable."""
     if (pd.isna(measurement)):
         return np.nan
     
@@ -41,6 +41,7 @@ def convert_to_inches(measurement):
     return np.nan
 
 def clean_and_merge_data():
+    """Grabs and cleans the historical combine and stats data, merges them together, and prepares the 2026 combine data for prediction."""
     data_dir = '../data/historical_training_data/'
     
     historical_combine = []

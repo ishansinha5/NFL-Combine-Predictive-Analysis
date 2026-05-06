@@ -23,9 +23,8 @@ def generate_predictions(train_df, predict_df, cumulative_mode=False):
     y_train = train_df[target_col].copy()
     X_predict = predict_df[feature_cols].copy()
     
-    # 3. The Ultimate Safety Net
-    # Force every single column to be a numeric float. If a string like 'CB' 
-    # sneaks in, it gets turned into a NaN, which we then fill with 0.
+    # 3. Create the Safety net
+    # Force every single column to be a numeric float. If a string like 'CB' makes it in, it gets turned into a NaN, which we then fill with 0.
     for col in feature_cols:
         X_train[col] = pd.to_numeric(X_train[col], errors='coerce').fillna(0)
         X_predict[col] = pd.to_numeric(X_predict[col], errors='coerce').fillna(0)
@@ -35,13 +34,13 @@ def generate_predictions(train_df, predict_df, cumulative_mode=False):
     X_train_scaled = scaler.fit_transform(X_train)
     X_predict_scaled = scaler.transform(X_predict)
     
-    # 5. Model 1: Support Vector Machine (Baseline)
+    # 5. Model 1: Support Vector Machine (Baseline carryover from cmse202)
     svm_model = SVR(kernel='rbf', C=1.0, epsilon=0.1)
     svm_model.fit(X_train_scaled, y_train)
     
     predict_df['Predicted_Success_SVM'] = svm_model.predict(X_predict_scaled)
     
-    # 6. Model 2: Random Forest (Advanced)
+    # 6. Model 2: Random Forest (Advanced carryover from cmse202)
     rf_model = RandomForestRegressor(n_estimators=150, random_state=42)
     rf_model.fit(X_train_scaled, y_train)
     

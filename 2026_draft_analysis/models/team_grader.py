@@ -1,3 +1,4 @@
+import sys
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -6,18 +7,75 @@ import os
 from data_cleaner import clean_and_merge_data
 from predictor import generate_predictions
 
-def grade_teams():
-    print("1. Spinning up the ML Engine (OHE Enabled)...")
+def generate_team_visualizations(merged_df, mode):
+    # 1. Establish the routing logic for the toggle
+    save_dir = "../visualizations/"
+    
+    if (mode == "normalized"):
+        save_dir = "../visualizations/normalized/"
+        
+    if (mode == "cumulative"):
+        save_dir = "../visualizations/cumulative/"
+        
+    if (os.path.exists(save_dir) == False):
+        os.makedirs(save_dir)
+
+    # 2. OVERALL DRAFT CLASS GRADES
+    team_averages = merged_df.groupby('Team')['Hybrid_Success_Score'].mean().reset_index()
+    team_averages = team_averages.sort_values(by='Hybrid_Success_Score', ascending=False)
+    
+    plt.figure(figsize=(10, 6))
+    sns.barplot(x='Hybrid_Success_Score', y='Team', data=team_averages, palette='viridis', hue='Team', legend=False)
+    plt.title('Overall 2026 Draft Class Average Hybrid Score (' + mode.upper() + ')')
+    plt.xlabel('Avg Hybrid Success Score')
+    plt.ylabel('NFL Franchise')
+    plt.tight_layout()
+    plt.savefig(save_dir + "Overall_Draft_Grades.png")
+    plt.close()
+
+    # 3. INDIVIDUAL TEAM GROUPED BAR CHARTS
+    unique_teams = merged_df['Team'].unique()
+    
+    for team_name in unique_teams:
+        team_df = merged_df[merged_df['Team'] == team_name]
+        
+        if (len(team_df) > 0):
+            team_df = team_df.sort_values(by='Hybrid_Success_Score', ascending=False)
+            
+            plot_df = team_df[['Player', 'Predicted_Success_SVM', 'Predicted_Success_RF']]
+            plot_df = plot_df.set_index('Player')
+            
+            plot_df.plot(kind='bar', figsize=(12, 6), color=['blue', 'green'])
+            
+            plt.title(team_name + ' - 2026 Draft Picks (SVM vs RF)')
+            plt.ylabel('Predicted Score')
+            plt.xlabel('Drafted Player')
+            plt.xticks(rotation=45)
+            plt.legend(['SVM Score', 'Random Forest Score'])
+            plt.tight_layout()
+            
+            filename = team_name + "_picks.png"
+            plt.savefig(save_dir + filename)
+            plt.close()
+            
+            print("Generated team chart for: " + team_name)
+
+def grade_teams(run_mode):
+    print("1. Booting up the ML Engine (OHE Enabled)...")
     train_df, predict_df = clean_and_merge_data()
     
-    print("2. Running SVM/RF A/B Test & Ensemble Generation...")
-    scored_df = generate_predictions(train_df, predict_df, cumulative_mode=False)
+    print("2. Running SVM/RF A/B Test & Ensemble Generation for " + run_mode + " mode...")
+    cum_mode = False
+    if (run_mode == "cumulative"):
+        cum_mode = True
+        
+    scored_df = generate_predictions(train_df, predict_df, cumulative_mode=cum_mode)
     
     print("3. Loading Draft Picks...")
     picks_path = '../data/raw_2026_picks.csv'
     
-    if (not os.path.exists(picks_path)):
-        raise FileNotFoundError(f"Could not find {picks_path}.")
+    if (os.path.exists(picks_path) == False):
+        raise FileNotFoundError("Could not find picks dataset.")
         
     picks_df = pd.read_csv(picks_path)
     
@@ -27,77 +85,41 @@ def grade_teams():
     print("4. Merging Predictions with Team Data...")
     team_drafts = pd.merge(picks_df, scored_df, on='Player', how='inner')
     
-    target_teams = [
-        'Chicago Bears', 
-        'Detroit Lions', 
-        'Green Bay Packers', 
-        'Minnesota Vikings', 
-        'Baltimore Ravens'
-    ]
-    
-    target_df = team_drafts[team_drafts['Team'].isin(target_teams)].copy()
+    target_teams = ['Chicago Bears', 'Detroit Lions', 'Green Bay Packers', 'Minnesota Vikings', 'Baltimore Ravens']
+    merged_df = team_drafts[team_drafts['Team'].isin(target_teams)].copy()
     
     print("\n=================================")
     print("       2026 DRAFT GRADES         ")
     print("=================================")
     
-    team_scores = []
-    
     for team in target_teams:
-        team_data = target_df[target_df['Team'] == team]
+        team_data = merged_df[merged_df['Team'] == team]
         
         if (len(team_data) > 0):
             avg_score = team_data['Hybrid_Success_Score'].mean()
-            
-            team_dict = {
-                'Team': team, 
-                'Average_Score': avg_score, 
-                'Players_Drafted': len(team_data)
-            }
-            team_scores.append(team_dict)
-            
-            print(f"\n{team.upper()} (Drafted {len(team_data)} modeled players)")
-            print(f"Class Grade (Avg Hybrid Score): {avg_score:.3f}")
+            print("\n" + team.upper() + " (Drafted " + str(len(team_data)) + " modeled players)")
+            print("Class Grade (Avg Hybrid Score): " + str(round(avg_score, 3)))
             
             sorted_team = team_data.sort_values(by='Hybrid_Success_Score', ascending=False)
             
             for index, row in sorted_team.iterrows():
                 player_pos = "UNK"
                 for col in row.index:
-                    if (col.startswith('Pos_') and row[col] == 1):
-                        player_pos = col.replace('Pos_', '')
-                        break
-                        
-                print(f"  - {row['Player']} ({player_pos}) | Score: {row['Hybrid_Success_Score']:.3f} (SVM: {row['Predicted_Success_SVM']:.3f}, RF: {row['Predicted_Success_RF']:.3f})")
+                    if (str(col).startswith('Pos_')):
+                        if (row[col] == 1):
+                            player_pos = str(col).replace('Pos_', '')
+                            break
+                            
+                print("  - " + row['Player'] + " (" + player_pos + ") | Score: " + str(round(row['Hybrid_Success_Score'], 3)) + " (SVM: " + str(round(row['Predicted_Success_SVM'], 3)) + ", RF: " + str(round(row['Predicted_Success_RF'], 3)) + ")")
                 
-    print("\n5. Generating Visualization...")
-    if (len(team_scores) == 0):
-        print("WARNING: No matching players found. Check raw_2026_picks.csv formatting.")
-        return
-        
-    score_df = pd.DataFrame(team_scores).sort_values(by='Average_Score', ascending=False)
-    
-    plt.figure(figsize=(10, 6))
-    sns.barplot(x='Average_Score', y='Team', data=score_df, palette='viridis', hue='Team', legend=False)
-    
-    plt.title('2026 Target Draft Class Strength (SVM + RF Hybrid)', fontsize=14, fontweight='bold')
-    plt.xlabel('Average Predicted wAV Per Season', fontsize=12)
-    plt.ylabel('NFL Franchise', fontsize=12)
-    
-    max_score = score_df['Average_Score'].max()
-    plt.xlim(0, max_score * 1.15)
-    
-    for index, value in enumerate(score_df['Average_Score']):
-        plt.text(value + 0.05, index, f'{value:.3f}', va='center', fontsize=11)
-        
-    plt.tight_layout()
-    
-    vis_path = '../visualizations/2026_draft_grades.png'
-    os.makedirs(os.path.dirname(vis_path), exist_ok=True)
-    plt.savefig(vis_path)
-    
-    print(f"Chart saved successfully to: {vis_path}")
-    plt.show()
+    print("\n5. Generating Visualizations...")
+    generate_team_visualizations(merged_df, run_mode)
 
-if __name__ == "__main__":
-    grade_teams()
+if (__name__ == "__main__"):
+    mode = "normalized"
+    
+    if (len(sys.argv) > 1):
+        if (sys.argv[1] == "cumulative"):
+            mode = "cumulative"
+            
+    grade_teams(mode)
