@@ -2,14 +2,12 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 
-def generate_predictions(clean_df, cumulative_mode=False):
+def generate_predictions(train_df, predict_df, cumulative_mode=False):
     """
     Trains models on historical data and predicts the 2026 class success.
     Uses cumulative_mode to toggle between total wAV and Avg_wAV_Per_Season.
     """
     # 1. Vectorized Split
-    train_df = clean_df[clean_df['Draft_Year'] < 2026].copy()
-    predict_df = clean_df[clean_df['Draft_Year'] == 2026].copy()
 
     # 2. Define Features and Target
     features = ['Ht_Inches', 'Wt', '40yd', 'Vertical', 'Broad Jump']
@@ -51,10 +49,10 @@ if __name__ == "__main__":
     from data_cleaner import clean_and_merge_data
     
     print("1. Running cleaner...")
-    df = clean_and_merge_data()
+    train_df, predict_df = clean_and_merge_data()
     
     print("2. Running predictor (Normalized Mode)...")
-    scored_df = generate_predictions(df, cumulative_mode=False)
+    scored_df = generate_predictions(train_df, predict_df, cumulative_mode=False)
     
     scored_df = scored_df.sort_values(by='Hybrid_Success_Score', ascending=False).reset_index(drop=True)
     
