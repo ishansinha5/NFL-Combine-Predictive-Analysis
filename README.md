@@ -4,7 +4,7 @@ Welcome to my NFL Draft analysis project. This codebase is a massive architectur
 
 I wanted to take those early concepts and upgrade them into a proper, object-oriented enterprise machine learning pipeline. 
 
-This program ingests historical NFL Combine data (2021–2025), trains an ensemble of models on raw athletic traits, and scores the 2026 NFL Draft class. I specifically targeted the NFC North (since I am a Chicago Bears fan), the Baltimore Ravens (the team of a very good friend of mine), and the Indianapolis Colts.
+This program ingests historical NFL Combine data (2021–2025), trains an ensemble of models on raw athletic traits, and scores the 2026 NFL Draft class. I specifically targeted the NFC North (since I am a Chicago Bears fan), the Baltimore Ravens, and the Indianapolis Colts (the latter two are the favorite teams of friends of mine).
 
 ## The Tech Stack & Architecture
 
