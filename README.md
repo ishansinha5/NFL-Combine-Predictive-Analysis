@@ -20,6 +20,8 @@ Moving from Jupyter notebooks to a modular Python pipeline meant making some big
 
 Based on the final evaluation, the Minnesota Vikings walked away with the best overall draft class among the teams I tracked, scoring an average Hybrid Score of 1.960 per drafted player. This was heavily anchored by their high-upside defensive line picks.
 
+Building an A/B ensemble taught me how to effectively balance algorithmic strengths. I used a Support Vector Machine as a stable, linear baseline, pairing it with a Random Forest Regressor to capture complex, non-linear trait intersections like size-adjusted speed. Blending these models into a single Hybrid Score ultimately mitigated their individual blind spots and produced a much more reliable evaluation than any single algorithm could achieve.
+
 This project was a major learning experience for me in a few ways:
 1. **Modular Python:** I learned how to properly separate concerns. Moving data cleaning, model training, and orchestration into their own isolated scripts (data_cleaner.py, predictor.py, team_grader.py) makes the code infinitely easier to debug and scale.
 2. **Handling Missing Data:** I built strict drop logic. If a player was not invited to the Combine or did not run the required drills, the pipeline refuses to hallucinate dummy stats to score them. This maintains mathematical integrity and explains why a few late-round picks are missing from the final outputs.
