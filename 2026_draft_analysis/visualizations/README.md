@@ -28,8 +28,8 @@ On the positional ranking charts, you will see many players labeled with (N/A). 
 
 **Team Roster Breakdown (Normalized)**
 This chart demonstrates how individual team draft classes are evaluated, showing the head-to-head model consensus for every player selected by the Chicago Bears.
-![Chicago Bears Draft Picks](../assets/Chicago Bears_picks.png)
+![Chicago Bears Draft Picks](../../assets/Chicago_Bears_picks.png)
 
 **Positional Rankings & Competitive Intelligence**
-This chart shows the top 15 Defensive Tackles in the 2026 class. Notice the (N/A) tags—these highlight elite prospects who were drafted by non-target franchises, providing a "Gold Standard" baseline to compare our target teams' picks against.
-![Top 2026 Prospects: DT](../assets/CB_rankings.png)
+This chart shows the top 15 Cornerbacks in the 2026 class. Notice the (N/A) tags—these highlight elite prospects who were drafted by non-target franchises, providing a "Gold Standard" baseline to compare our target teams' picks against.
+![Top 2026 Prospects: CB](../../assets/CB_rankings.png)
