@@ -16,7 +16,7 @@ Moving from Jupyter notebooks to a modular Python pipeline meant making some big
 
 ## Conclusions & Takeaways
 
-![Overall 2026 Draft Class Average Hybrid Score](assets/image_15bc81.png)
+![Overall 2026 Draft Class Average Hybrid Score](assets/Overall_Draft_Grades.png)
 
 Based on the final evaluation, the Minnesota Vikings walked away with the best overall draft class among the teams I tracked, scoring an average Hybrid Score of 1.960 per drafted player. This was heavily anchored by their high-upside defensive line picks.
 
