@@ -9,17 +9,27 @@ Inside the team and position subfolders, you will find grouped bar charts for sp
 * **The Y-Axis:** The predicted wAV value.
 * **The Bars:** Every player has two bars. The first bar is the SVM Model Prediction (Support Vector Machine). The second bar is the Random Forest Prediction. 
 * **Team Abbreviations:** On positional charts, player names include a tag indicating their destination: 
-    * (CB) [cite_start]Chicago Bears [cite: 1, 24]
-    * (MV) [cite_start]Minnesota Vikings [cite: 1, 3]
-    * (DL) [cite_start]Detroit Lions [cite: 1, 18]
-    * (GBP) [cite_start]Green Bay Packers [cite: 1, 6]
-    * (BR) [cite_start]Baltimore Ravens [cite: 2, 12, 13, 20, 26]
-    * (IC) [cite_start]Indianapolis Colts [cite: 4, 5, 10, 14, 17]
-    * (BB) [cite_start]Buffalo Bills [cite: 5, 8, 9, 13, 15, 19, 20]
+    * (CB) Chicago Bears
+    * (MV) Minnesota Vikings
+    * (DL) Detroit Lions
+    * (GBP) Green Bay Packers
+    * (BR) Baltimore Ravens
+    * (IC) Indianapolis Colts
+    * (BB) Buffalo Bills
 
 ### 2. What does (N/A) mean?
-On the positional ranking charts, you will see many players labeled with (N/A). This is a feature of the model, not a bug. These are elite prospects who ranked in the top 15 for their position but were drafted by teams not currently in our target list. [cite_start]For example, Maxwell Iheanachor (N/A) was drafted by the Pittsburgh Steelers [cite: 13][cite_start], and Monroe Freeling (N/A) was drafted by the Carolina Panthers[cite: 10]. Including them allows you to see how your team's picks compare to the "Gold Standard" athletes of the 2026 class.
+On the positional ranking charts, you will see many players labeled with (N/A). This is a feature of the model, not a bug. These are elite prospects who ranked in the top 15 for their position but were drafted by teams not currently in our target list. For example, Maxwell Iheanachor (N/A) was drafted by the Pittsburgh Steelers, and Monroe Freeling (N/A) was drafted by the Carolina Panthers. Including them allows you to see how your team's picks compare to the "Gold Standard" athletes of the 2026 class.
 
 ### 3. Normalized vs. Cumulative
 * **Normalized Folder (Default):** Measures Average wAV Per Season. This is the superior metric for evaluating immediate impact for a new rookie class because it levels the playing field between veterans and younger players.
 * **Cumulative Folder:** Measures Total Career wAV. This measures absolute longevity and total career production, which is biased toward players who have been in the league longer.
+
+### 4. Visual Examples
+
+**Team Roster Breakdown (Normalized)**
+This chart demonstrates how individual team draft classes are evaluated, showing the head-to-head model consensus for every player selected by the Chicago Bears.
+![Chicago Bears Draft Picks](../assets/image_15bc42.png)
+
+**Positional Rankings & Competitive Intelligence**
+This chart shows the top 15 Defensive Tackles in the 2026 class. Notice the (N/A) tags—these highlight elite prospects who were drafted by non-target franchises, providing a "Gold Standard" baseline to compare our target teams' picks against.
+![Top 2026 Prospects: DT](../assets/image_15b8a2.png)

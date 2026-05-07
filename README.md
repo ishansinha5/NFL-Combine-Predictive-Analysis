@@ -1,8 +1,10 @@
 # 2026 NFL Draft Class Analyzer: Machine Learning Pipeline
 
+![Chicago Bears Draft Day](assets/bears_draft_day.jpg)
+
 This project is a massive architectural evolution of a final project I originally completed for CMSE 202 at Michigan State University. In that original project, my group built fragmented Jupyter notebooks to predict player success; I specifically handled the machine learning models for the Tight End position. 
 
-I wanted to take those early concepts and upgrade them into a proper, object-oriented enterprise machine learning pipeline. This program ingests historical NFL Combine data (2021–2025), trains an ensemble of models on raw athletic traits, and scores the 2026 NFL Draft class. I specifically targeted the NFC North (since I am a Chicago Bears fan), the Baltimore Ravens, the Indianapolis Colts, and the Buffalo Bills (the latter 3 teams are favorites of my friends).
+I wanted to take those early concepts and upgrade them into a proper, object-oriented enterprise machine learning pipeline. This program ingests historical NFL Combine data (2021–2025), trains an ensemble of models on raw athletic traits, and scores the 2026 NFL Draft class. I specifically targeted the NFC North (since I am a Chicago Bears fan), the Baltimore Ravens (the team of a very good friend of mine), the Indianapolis Colts, and the Buffalo Bills.
 
 ## The Tech Stack & Architecture
 
@@ -13,6 +15,8 @@ Moving from Jupyter notebooks to a modular Python pipeline meant making some big
 * **Strict Feature Whitelisting:** The models are mathematically locked down to only look at pre-draft athletic traits (Height, Weight, 40yd dash, Jumps) and the OHE positional columns. This prevents target leakage, ensuring the model cannot cheat by accidentally looking at post-draft NFL stats or college names during training.
 
 ## Conclusions & Takeaways
+
+![Overall 2026 Draft Class Average Hybrid Score](assets/image_15bc81.png)
 
 Based on the final evaluation, the Minnesota Vikings walked away with the best overall draft class among the teams I tracked, scoring an average Hybrid Score of 1.960 per drafted player. This was heavily anchored by their high-upside defensive line picks.
 
