@@ -4,11 +4,11 @@
 
 This project is a massive architectural evolution of a final project I originally completed for CMSE 202 at Michigan State University. In that original project, my group built fragmented Jupyter notebooks to predict player success; I specifically handled the machine learning models for the Tight End position. 
 
-I wanted to take those early concepts and upgrade them into a proper, object-oriented enterprise machine learning pipeline. This program ingests historical NFL Combine data (2021–2025), trains an ensemble of models on raw athletic traits, and scores the 2026 NFL Draft class. I specifically targeted the NFC North (since I am a Chicago Bears fan), the Baltimore Ravens (the team of a very good friend of mine), the Indianapolis Colts, and the Buffalo Bills.
+I wanted to take those early concepts and upgrade them into a proper, object-oriented enterprise machine learning pipeline. This program ingests historical NFL Combine data (2021–2025), trains an ensemble of models on raw athletic traits, and scores the 2026 NFL Draft class. I specifically targeted the NFC North (since I am a Chicago Bears fan), the Baltimore Ravens, the Indianapolis Colts, and the Buffalo Bills (the latter 3 of which are the favorite teams of my friends).
 
 ## The Tech Stack & Architecture
 
-Moving from Jupyter notebooks to a modular Python pipeline meant making some big architectural shifts. Here is the logic behind the code:
+Moving from Jupyter notebooks to a modular Python pipeline meant making some big architectural shifts. You can find all of the original code under the folder "cmse202_legacy", where I worked on the Tight End portions. Here is the logic behind the code:
 
 * **One-Hot Encoding (The Master Model):** In my original project, we built separate "micro-models" for every single position. That was an overfitting nightmare and computationally expensive. By using One-Hot Encoding (OHE) on the Pos column, I was able to build a single master model that evaluates over 1,700 players simultaneously while still dynamically adjusting its mathematical expectations based on what position a prospect plays.
 * **The A/B Ensemble Test (SVM vs. Random Forest):** To honor the legacy of the original project, I kept the Support Vector Machine (SVM) as a baseline since it requires perfectly scaled data and handles linear boundaries well. I paired it head-to-head with a Random Forest Regressor, which is a much more advanced engine for handling complex, non-linear trait intersections like size-adjusted speed. The final grade for a player is a blended Hybrid Success Score of both models.
